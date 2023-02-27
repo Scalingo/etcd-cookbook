@@ -30,16 +30,25 @@ action :create do
     action :create
   end
 
+  directory new_resource.etcd_bin_prefix do
+    action :create
+  end
+
+  file 'etcd_checksum' do
+    path "#{new_resource.etcd_bin_prefix}/.etcd_checksum"
+    content new_resource.checksum
+  end
+
   execute 'extract etcd' do
     command extract_etcd_cmd
     action :nothing
-    subscribes :run, 'remote_file[etcd tarball]'
+    subscribes :run, 'file[etcd_checksum]'
   end
 
   execute 'extract etcdctl' do
     command extract_etcdctl_cmd
     action :nothing
-    subscribes :run, 'remote_file[etcd tarball]'
+    subscribes :run, 'file[etcd_checksum]'
   end
 end
 
@@ -77,24 +86,8 @@ def default_checksum
   end
 end
 
-def etcd_bin
-  "#{etcd_bin_prefix}/etcd"
-end
-
-def etcd_bin_prefix
-  '/usr/bin'
-end
-
-def etcdctl_bin
-  "#{etcdctl_bin_prefix}/etcdctl"
-end
-
-def etcdctl_bin_prefix
-  etcd_bin_prefix
-end
-
 def extract_etcd_cmd
-  "tar xvf #{file_cache_path}/etcd-v#{version}-linux-amd64.tar.gz -C #{etcd_bin_prefix} etcd-v#{version}-linux-amd64/etcd --strip-components=1"
+  "tar xvf #{file_cache_path}/etcd-v#{version}-linux-amd64.tar.gz -C #{new_resource.etcd_bin_prefix} etcd-v#{version}-linux-amd64/etcd --strip-components=1"
 end
 
 def extract_etcdctl_cmd

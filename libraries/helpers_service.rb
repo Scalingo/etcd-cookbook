@@ -1,12 +1,8 @@
 module EtcdCookbook
   module EtcdHelpers
     module Service
-      def etcd_bin
-        '/usr/bin/etcd'
-      end
-
       def etcd_cmd
-        [etcd_bin, etcd_daemon_opts].join(' ').strip
+        [new_resource.etcd_bin, etcd_daemon_opts].join(' ').strip
       end
 
       def etcd_daemon_opts
@@ -70,12 +66,8 @@ module EtcdCookbook
         end
       end
 
-      def etcdctl_bin
-        '/usr/bin/etcdctl'
-      end
-
       def etcdctl_cmd
-        [etcdctl_bin, etcdctl_opts].join(' ').strip
+        [new_resource.etcdctl_bin, etcdctl_opts].join(' ').strip
       end
 
       def etcdctl_opts
@@ -91,6 +83,18 @@ module EtcdCookbook
 
       def logfile
         "/var/log/#{etcd_name}.log"
+      end
+
+      def etcd_bin
+        "#{etcd_bin_prefix}/etcd"
+      end
+
+      def etcdctl_bin
+        "#{etcdctl_bin_prefix}/etcdctl"
+      end
+
+      def etcdctl_bin_prefix
+        etcd_bin_prefix
       end
     end
   end

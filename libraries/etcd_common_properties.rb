@@ -16,6 +16,7 @@ module EtcdCookbook
         #####################
         # set default service name like etcd.service
         property :default_service_name, kind_of: [TrueClass, FalseClass], default: false
+        property :etcd_bin_prefix, String, default: '/usr/bin', desired_state: false
 
         # https://etcd.io/docs/v3.5/op-guide/configuration/
         # Member flags
