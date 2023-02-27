@@ -62,7 +62,7 @@ def file_cache_path
 end
 
 def default_source
-  "https://github.com/coreos/etcd/releases/download/v#{version}/etcd-v#{version}-linux-amd64.tar.gz"
+  "https://github.com/etcd-io/etcd/releases/download/v#{version}/etcd-v#{version}-linux-amd64.tar.gz"
 end
 
 def default_checksum
