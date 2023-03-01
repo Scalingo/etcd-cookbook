@@ -7,3 +7,9 @@
 source 'https://rubygems.org'
 
 gem 'community_cookbook_releaser'
+
+group :test do
+  gem "bundler", "~> 2.0"
+  gem "rubocop-rspec"
+  gem "standard", "~> 1.1.0"
+end
