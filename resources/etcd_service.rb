@@ -7,8 +7,8 @@ unified_mode false
 default_action :create
 
 # installation type and service_manager
-property :install_method, %w(binary auto docker), default: 'auto', desired_state: false
-property :service_manager, %w(systemd auto docker), default: 'auto', desired_state: false
+property :install_method, %w[binary auto docker], default: "auto", desired_state: false
+property :service_manager, %w[systemd auto docker], default: "auto", desired_state: false
 
 # etcd_installation_binary
 property :checksum, String, desired_state: false
@@ -23,12 +23,12 @@ property :version, String, desired_state: false
 action_class do
   def installation(&block)
     case new_resource.install_method
-    when 'auto'
+    when "auto"
       install = etcd_installation(new_resource.name, &block)
-    when 'binary'
+    when "binary"
       install = etcd_installation_binary(new_resource.name, &block)
-    when 'none'
-      Chef::Log.info('Skipping Etcd installation. Assuming it was handled previously.')
+    when "none"
+      Chef::Log.info("Skipping Etcd installation. Assuming it was handled previously.")
       return
     end
     install.copy_properties_from(new_resource, exclude: [:install_method])
@@ -37,9 +37,9 @@ action_class do
 
   def svc_manager(&block)
     case new_resource.service_manager
-    when 'auto'
+    when "auto"
       svc = etcd_service_manager(new_resource.name, &block)
-    when 'systemd'
+    when "systemd"
       svc = etcd_service_manager_systemd(new_resource.name, &block)
     end
     svc.copy_properties_from(new_resource, exclude: [:service_manager, :install_method])

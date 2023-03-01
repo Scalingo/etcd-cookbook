@@ -48,7 +48,7 @@ module Etcd
     # @opts [String] :host IP address of the etcd server (default 127.0.0.1)
     # @opts [Fixnum] :port Port number of the etcd server (default 4001)
     # @opts [Fixnum] :read_timeout set HTTP read timeouts (default 60)
-    # rubocop:disable CyclomaticComplexity
+    # rubocop:disable Metrics/CyclomaticComplexity
     def initialize(opts = {})
       @host = opts[:host] || '127.0.0.1'
       @port = opts[:port] || 4001
@@ -65,7 +65,7 @@ module Etcd
       @config.ssl_key = opts.key?(:ssl_key) ? opts[:ssl_key] : nil
       yield @config if block_given?
     end
-    # rubocop:enable CyclomaticComplexity
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     # Returns the etcd api version that will be used for across API methods
     def version_prefix
@@ -88,10 +88,10 @@ module Etcd
     # * path    - etcd server path (etcd server end point)
     # * method  - the request method used
     # * options  - any additional parameters used by request method (optional)
-    # rubocop:disable MethodLength, CyclomaticComplexity
+    # rubocop:disable Metrics/MethodLength
     def api_execute(path, method, options = {})
       params = options[:params]
-      case  method
+      case method
       when :get
         req = build_http_request(Net::HTTP::Get, path, params)
       when :post
@@ -101,7 +101,7 @@ module Etcd
       when :delete
         req = build_http_request(Net::HTTP::Delete, path, params)
       else
-        fail "Unknown http action: #{method}"
+        raise "Unknown http action: #{method}"
       end
       http = Net::HTTP.new(host, port)
       http.read_timeout = options[:timeout] || read_timeout
@@ -138,14 +138,14 @@ module Etcd
         Log.debug('Http success')
         res
       when HTTP_CLIENT_ERROR
-        fail Error.from_http_response(res)
+        raise Error.from_http_response(res)
       else
         Log.debug('Http error')
         Log.debug(res.body)
         res.error!
       end
     end
-    # rubocop:enable MethodLength
+    # rubocop:enable Metrics/MethodLength
 
     def build_http_request(klass, path, params = nil, body = nil)
       path += '?' + URI.encode_www_form(params) unless params.nil?

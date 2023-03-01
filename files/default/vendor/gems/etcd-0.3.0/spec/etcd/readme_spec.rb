@@ -19,7 +19,7 @@ describe 'Etcd specs for the main etcd README examples' do
     end
     if action == :create
       it 'should set the parent key correctly' do
-        expect(@response.node.key).to match /^\/queue\/+/
+        expect(@response.node.key).to match %r{^/queue/+}
       end
     else
       it 'should set the key properly' do
@@ -37,7 +37,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   shared_examples 'response with valid http headers' do
-
     it 'should have a positive etcd index (comes from http header)' do
       expect(@response.etcd_index).to be > 0
     end
@@ -52,7 +51,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'set a key named "/message"' do
-
     before(:all) do
       @response = etcd_client.set('/message', value: 'PinkFloyd')
     end
@@ -66,7 +64,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'get a key named "/message"' do
-
     before(:all) do
       etcd_client.set('/message', value: 'PinkFloyd')
       @response = etcd_client.get('/message')
@@ -81,7 +78,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'change the value of a key named "/message"' do
-
     before(:all) do
       etcd_client.set('/message', value: 'World')
       @response = etcd_client.set('/message', value: 'PinkFloyd')
@@ -96,7 +92,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'delete a key named "/message"' do
-
     before(:all) do
       etcd_client.set('/message', value: 'World')
       etcd_client.set('/message', value: 'PinkFloyd')
@@ -112,7 +107,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'using ttl a key named "/message"' do
-
     before(:all) do
       etcd_client.set('/message', value: 'World')
       @set_time = Time.now
@@ -140,11 +134,9 @@ describe 'Etcd specs for the main etcd README examples' do
         client.get('/message')
       end.to raise_error
     end
-
   end
 
   context 'waiting for a change against a key named "/message"' do
-
     before(:all) do
       etcd_client.set('/message', value: 'foo')
       thr = Thread.new do
@@ -170,7 +162,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'atomic in-order keys' do
-
     before(:all) do
       @response = etcd_client.create_in_order('/queue', value: 'PinkFloyd')
     end
@@ -196,7 +187,7 @@ describe 'Etcd specs for the main etcd README examples' do
 
     it 'should enlist all children in sorted manner' do
       responses = []
-      10.times do |n|
+      10.times do |_n|
         responses << client.create_in_order('/queue', value: 'Deep Purple - Track #{n}')
       end
       directory = client.get('/queue', sorted: true)
@@ -210,7 +201,6 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'directory with ttl' do
-
     before(:all) do
       @response = etcd_client.set('/directory', dir: true, ttl: 4)
     end
@@ -253,11 +243,10 @@ describe 'Etcd specs for the main etcd README examples' do
   end
 
   context 'atomic compare and swap' do
-
     it 'should  raise error if prevExist is passed a false' do
       client.set('/foo', value: 'one')
       expect do
-        client.set('/foo', value: 'three',  prevExist: false)
+        client.set('/foo', value: 'three', prevExist: false)
       end.to raise_error
     end
 
@@ -285,7 +274,7 @@ describe 'Etcd specs for the main etcd README examples' do
 
     it 'should allow recursive directory listing' do
       response = client.get('/', recursive: true)
-      expect(response.children.find { |n|n.key == '/foo_dir' }.children).to_not be_empty
+      expect(response.children.find { |n| n.key == '/foo_dir' }.children).to_not be_empty
     end
 
     it 'should be able to delete empty directory without the recusrive flag' do

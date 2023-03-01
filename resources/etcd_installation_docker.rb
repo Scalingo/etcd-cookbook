@@ -6,9 +6,9 @@ unified_mode true
 # resource properties
 #####################
 
-property :repo, String, default: 'quay.io/coreos/etcd', desired_state: false
+property :repo, String, default: "quay.io/coreos/etcd", desired_state: false
 property :tag, String, default: lazy { "v#{version}" }, desired_state: false
-property :version, String, default: '3.2.15'
+property :version, String, default: "3.2.15"
 
 default_action :create
 
@@ -17,7 +17,7 @@ default_action :create
 #########
 
 action :create do
-  docker_image 'etcd' do
+  docker_image "etcd" do
     repo new_resource.repo
     tag new_resource.tag
     action :pull
@@ -25,7 +25,7 @@ action :create do
 end
 
 action :delete do
-  docker_image 'etcd' do
+  docker_image "etcd" do
     repo new_resource.repo
     tag new_resource.tag
     action :remove

@@ -1,4 +1,4 @@
-require_relative 'helpers_service'
+require_relative "helpers_service"
 
 module EtcdCookbook
   module EtcdCommonProperties
@@ -16,7 +16,7 @@ module EtcdCookbook
         #####################
         # set default service name like etcd.service
         property :default_service_name, kind_of: [TrueClass, FalseClass], default: false
-        property :etcd_bin_prefix, String, default: '/usr/local/bin', desired_state: false
+        property :etcd_bin_prefix, String, default: "/usr/local/bin", desired_state: false
 
         # https://etcd.io/docs/v3.5/op-guide/configuration/
         # Member flags
@@ -80,14 +80,14 @@ module EtcdCookbook
 
         # Profiling Flags
         property :enable_pprof, [true, false], default: false, desired_state: false
-        property :metrics, String, default: 'basic', desired_state: false
+        property :metrics, String, default: "basic", desired_state: false
         property :listen_metrics_urls, String, desired_state: false
 
         # Auth Flags
-        property :auth_token, String, default: 'simple', desired_state: false
+        property :auth_token, String, default: "simple", desired_state: false
 
         # Misc
-        property :run_user, String, default: 'etcd', desired_state: false
+        property :run_user, String, default: "etcd", desired_state: false
         property :http_proxy, [String, nil], desired_state: false
         property :https_proxy, [String, nil], desired_state: false
         property :no_proxy, [String, nil], desired_state: false

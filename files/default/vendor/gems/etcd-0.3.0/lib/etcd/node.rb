@@ -6,10 +6,10 @@ module Etcd
     include Comparable
 
     attr_reader :created_index, :modified_index, :expiration, :ttl, :key, :value, :dir
-    alias_method :createdIndex, :created_index
-    alias_method :modifiedIndex, :modified_index
+    alias createdIndex created_index
+    alias modifiedIndex modified_index
 
-    # rubocop:disable MethodLength
+    # rubocop:disable Metrics/MethodLength
     def initialize(opts = {})
       @created_index = opts['createdIndex']
       @modified_index = opts['modifiedIndex']
@@ -34,12 +34,12 @@ module Etcd
       if directory?
         @children ||= []
       else
-        fail 'This is not a directory, cant have children'
+        raise 'This is not a directory, cant have children'
       end
     end
 
     def directory?
-      ! @dir.nil?
+      !@dir.nil?
     end
   end
 end

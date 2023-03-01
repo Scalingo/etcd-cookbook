@@ -1,7 +1,7 @@
 module EtcdCookbook
   module EtcdHelpers
     module Base
-      require 'shellwords'
+      require "shellwords"
     end
   end
 end

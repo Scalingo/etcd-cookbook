@@ -1,5 +1,5 @@
-$:.unshift File.expand_path('../lib', __FILE__)
-require 'mixlib/log/version'
+$:.unshift File.expand_path("../lib", __FILE__)
+require "mixlib/log/version"
 
 Gem::Specification.new do |gem|
   gem.name = "mixlib-log"
@@ -10,9 +10,9 @@ Gem::Specification.new do |gem|
   gem.homepage = "http://www.opscode.com"
   gem.authors = ["Opscode, Inc."]
   gem.has_rdoc = true
-  gem.extra_rdoc_files = ["README.rdoc", "LICENSE", 'NOTICE']
-  gem.files = Dir['lib/**/*'] + Dir['spec/**/*'] + ["Rakefile", ".gemtest", "mixlib-log.gemspec"]
-  gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'rspec', '~> 2.10'
-  gem.add_development_dependency 'cucumber'
+  gem.extra_rdoc_files = ["README.rdoc", "LICENSE", "NOTICE"]
+  gem.files = Dir["lib/**/*"] + Dir["spec/**/*"] + ["Rakefile", ".gemtest", "mixlib-log.gemspec"]
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "rspec", "~> 2.10"
+  gem.add_development_dependency "cucumber"
 end

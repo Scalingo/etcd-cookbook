@@ -30,10 +30,11 @@ module Etcd
     # * value - value to be set for specified key
     # * ttl   - shelf life of a key (in seconds) (optional)
     def set(key, opts = nil)
-      fail ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
-      path  = key_endpoint + key
+      raise ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
+
+      path = key_endpoint + key
       payload = {}
-      [:ttl, :value, :dir, :prevExist, :prevValue, :prevIndex].each do |k|
+      %i[ttl value dir prevExist prevValue prevIndex].each do |k|
         payload[k] = opts[k] if opts.key?(k)
       end
       response = api_execute(path, :put, params: payload)
@@ -56,9 +57,10 @@ module Etcd
     # * value     - new value to be set for specified key
     # * prevValue - value of a key to compare with existing value of key
     # * ttl       - shelf life of a key (in secsonds) (optional)
-    def compare_and_swap(key, opts =  {})
-      fail ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
-      fail ArgumentError, 'You must pass prevValue' unless opts.key?(:prevValue)
+    def compare_and_swap(key, opts = {})
+      raise ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
+      raise ArgumentError, 'You must pass prevValue' unless opts.key?(:prevValue)
+
       set(key, opts)
     end
 
@@ -71,7 +73,8 @@ module Etcd
     # @options [Fixnum] :timeout specify http timeout
     def watch(key, opts = {})
       params = { wait: true }
-      fail ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
+      raise ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
+
       timeout = opts[:timeout] || @read_timeout
       index = opts[:waitIndex] || opts[:index]
       params[:waitIndex] = index unless index.nil?
@@ -88,10 +91,11 @@ module Etcd
     end
 
     def create_in_order(dir, opts = {})
-      path  = key_endpoint + dir
-      fail ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
+      path = key_endpoint + dir
+      raise ArgumentError, 'Second argument must be a hash' unless opts.is_a?(Hash)
+
       payload = {}
-      [:ttl, :value].each do |k|
+      %i[ttl value].each do |k|
         payload[k] = opts[k] if opts.key?(k)
       end
       response = api_execute(path, :post, params: payload)
@@ -122,9 +126,9 @@ module Etcd
       end
     end
 
-    alias_method :key?, :exists?
-    alias_method :exist?, :exists?
-    alias_method :has_key?, :exists?
-    alias_method :test_and_set, :compare_and_swap
+    alias key? exists?
+    alias exist? exists?
+    alias has_key? exists?
+    alias test_and_set compare_and_swap
   end
 end

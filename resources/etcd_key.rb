@@ -1,4 +1,4 @@
-require 'etcd'
+require "etcd"
 
 resource_name :etcd_key
 provides :etcd_key
@@ -7,7 +7,7 @@ unified_mode true
 property :key, String, name_property: true, desired_state: false
 property :value, String
 property :ttl, String, desired_state: false
-property :host, String, default: '127.0.0.1', desired_state: false
+property :host, String, default: "127.0.0.1", desired_state: false
 property :port, Integer, default: 2379, desired_state: false
 
 def etcd
@@ -30,7 +30,7 @@ end
 def key_exist?
   true if etcd.get(key)
 rescue Etcd::KeyNotFound,
-       Errno::ECONNREFUSED
+  Errno::ECONNREFUSED
   false
 end
 
@@ -40,7 +40,7 @@ end
 
 action :set do
   converge_if_changed do
-    opts = { value: new_resource.value }
+    opts = {value: new_resource.value}
     opts[:ttl] = new_resource.ttl if new_resource.ttl
     converge_by "will set value of key #{new_resource.key}" do
       with_retries { etcd.set(new_resource.key, opts) }

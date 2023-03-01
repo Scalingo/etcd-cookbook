@@ -1,7 +1,7 @@
-etcd_installation_binary 'default' do
+etcd_installation_binary "default" do
   action :create
 end
 
-etcd_service_manager_systemd 'default' do
+etcd_service_manager_systemd "default" do
   action :start
 end

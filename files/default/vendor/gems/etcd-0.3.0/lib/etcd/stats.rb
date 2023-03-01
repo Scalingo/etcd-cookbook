@@ -18,7 +18,7 @@ module Etcd
       when :self
         JSON.parse(api_execute(stats_endpoint + '/self', :get).body)
       else
-        fail ArgumentError, "Invalid stats type '#{type}'"
+        raise ArgumentError, "Invalid stats type '#{type}'"
       end
     end
   end

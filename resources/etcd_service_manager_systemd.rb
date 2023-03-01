@@ -8,9 +8,9 @@ unified_mode true
 property :service_timeout, Integer, default: 120
 
 action :start do
-  user 'etcd' do
+  user "etcd" do
     action :create
-    only_if { new_resource.run_user == 'etcd' }
+    only_if { new_resource.run_user == "etcd" }
   end
 
   file logfile do
@@ -20,15 +20,15 @@ action :start do
 
   directory new_resource.data_dir do
     owner new_resource.run_user
-    mode '0700'
+    mode "0700"
     action :create
   end
 
   # Needed for Debian / Ubuntu
-  directory '/usr/libexec' do
-    owner 'root'
-    group 'root'
-    mode '0755'
+  directory "/usr/libexec" do
+    owner "root"
+    group "root"
+    mode "0755"
     action :create
   end
 
@@ -39,22 +39,22 @@ action :start do
 
   systemd_contents = {
     Unit: {
-      Description: 'Etcd Application Container Engine',
-      Documentation: 'https://etcd.io/docs/',
-      After: 'network.target',
+      Description: "Etcd Application Container Engine",
+      Documentation: "https://etcd.io/docs/",
+      After: "network.target",
     },
     Service: {
-      Type: 'notify',
+      Type: "notify",
       ExecStart: etcd_cmd,
-      Restart: 'always',
-      RestartSec: '10s',
-      LimitNOFILE: '1048576',
-      LimitNPROC: '1048576',
-      LimitCORE: 'infinity',
+      Restart: "always",
+      RestartSec: "10s",
+      LimitNOFILE: "1048576",
+      LimitNPROC: "1048576",
+      LimitCORE: "infinity",
       TimeoutStartSec: new_resource.service_timeout.to_s,
     },
     Install: {
-      WantedBy: 'multi-user.target',
+      WantedBy: "multi-user.target",
     },
   }
 

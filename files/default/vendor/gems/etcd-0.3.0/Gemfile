@@ -4,9 +4,9 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'coco'
-gem 'rubocop'
 gem 'guard'
 gem 'guard-rake'
 gem 'json'
+gem 'rubocop'
 # uuid gem isn't pulling in systemu
 gem 'systemu'

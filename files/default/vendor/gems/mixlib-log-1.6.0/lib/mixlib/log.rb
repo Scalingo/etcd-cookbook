@@ -16,18 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'logger'
-require 'mixlib/log/version'
-require 'mixlib/log/formatter'
+require "logger"
+require "mixlib/log/version"
+require "mixlib/log/formatter"
 
 module Mixlib
   module Log
-
     @logger, @loggers = nil
 
-    LEVELS = { :debug=>Logger::DEBUG, :info=>Logger::INFO, :warn=>Logger::WARN, :error=>Logger::ERROR, :fatal=>Logger::FATAL}.freeze
+    LEVELS = {debug: Logger::DEBUG, info: Logger::INFO, warn: Logger::WARN, error: Logger::ERROR, fatal: Logger::FATAL}.freeze
     LEVEL_NAMES = LEVELS.invert.freeze
-
 
     def reset!
       @logger, @loggers = nil, nil
@@ -51,19 +49,19 @@ module Mixlib
     # that had been added to the +loggers+ array will be cleared.
     def logger=(new_log_device)
       reset!
-      @logger=new_log_device
+      @logger = new_log_device
     end
 
     def use_log_devices(other)
       if other.respond_to?(:loggers) && other.respond_to?(:logger)
         @loggers = other.loggers
         @logger = other.logger
-      elsif other.kind_of?(Array)
+      elsif other.is_a?(Array)
         @loggers = other
         @logger = other.first
       else
         msg = "#use_log_devices takes a Mixlib::Log object or array of log devices. " <<
-              "You gave: #{other.inspect}"
+          "You gave: #{other.inspect}"
         raise ArgumentError, msg
       end
     end
@@ -78,7 +76,7 @@ module Mixlib
     def init(*opts)
       reset!
       @logger = logger_for(*opts)
-      @logger.formatter = Mixlib::Log::Formatter.new() if @logger.respond_to?(:formatter=)
+      @logger.formatter = Mixlib::Log::Formatter.new if @logger.respond_to?(:formatter=)
       @logger.level = Logger::WARN
       @logger
     end
@@ -95,21 +93,21 @@ module Mixlib
     def level=(new_level)
       level_int = LEVEL_NAMES.key?(new_level) ? new_level : LEVELS[new_level]
       raise ArgumentError, "Log level must be one of :debug, :info, :warn, :error, or :fatal" if level_int.nil?
-      loggers.each {|l| l.level = level_int }
+      loggers.each { |l| l.level = level_int }
     end
 
-    def level(new_level=nil)
+    def level(new_level = nil)
       if new_level.nil?
         LEVEL_NAMES[logger.level]
       else
-        self.level=(new_level)
+        self.level = (new_level)
       end
     end
 
     # Define the standard logger methods on this class programmatically.
     # No need to incur method_missing overhead on every log call.
     [:debug, :info, :warn, :error, :fatal].each do |method_name|
-      class_eval(<<-METHOD_DEFN, __FILE__, __LINE__)
+      class_eval(<<-METHOD_DEFN, __FILE__, __LINE__ + 1)
         def #{method_name}(msg=nil, &block)
           loggers.each {|l| l.#{method_name}(msg, &block) }
         end
@@ -121,7 +119,7 @@ module Mixlib
     # loggers that may have been added, even though it is possible to configure
     # two (or more) loggers at different log levels.
     [:debug?, :info?, :warn?, :error?, :fatal?].each do |method_name|
-      class_eval(<<-METHOD_DEFN, __FILE__, __LINE__)
+      class_eval(<<-METHOD_DEFN, __FILE__, __LINE__ + 1)
         def #{method_name}
           logger.#{method_name}
         end
@@ -129,20 +127,20 @@ module Mixlib
     end
 
     def <<(msg)
-      loggers.each {|l| l << msg }
+      loggers.each { |l| l << msg }
     end
 
     def add(severity, message = nil, progname = nil, &block)
-      loggers.each {|l| l.add(severity, message = nil, progname = nil, &block) }
+      loggers.each { |l| l.add(severity, message = nil, progname = nil, &block) }
     end
 
-    alias :log :add
+    alias_method :log, :add
 
     # Passes any other method calls on directly to the underlying Logger object created with init. If
     # this method gets hit before a call to Mixlib::Logger.init has been made, it will call
     # Mixlib::Logger.init() with no arguments.
     def method_missing(method_symbol, *args, &block)
-      loggers.each {|l| l.send(method_symbol, *args, &block) }
+      loggers.each { |l| l.send(method_symbol, *args, &block) }
     end
 
     private
@@ -150,12 +148,11 @@ module Mixlib
     def logger_for(*opts)
       if opts.empty?
         Logger.new(STDOUT)
-      elsif LEVELS.keys.inject(true) {|quacks, level| quacks && opts.first.respond_to?(level)}
+      elsif LEVELS.keys.inject(true) { |quacks, level| quacks && opts.first.respond_to?(level) }
         opts.first
       else
         Logger.new(*opts)
       end
     end
-
   end
 end

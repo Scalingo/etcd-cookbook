@@ -18,8 +18,9 @@ module Etcd
     def self.from_http_response(response)
       opts = JSON.parse(response.body)
       unless ERROR_CODE_MAPPING.key?(opts['errorCode'])
-        fail "Unknown error code: #{opts['errorCode']}"
+        raise "Unknown error code: #{opts['errorCode']}"
       end
+
       ERROR_CODE_MAPPING[opts['errorCode']].new(opts)
     end
 
@@ -30,26 +31,38 @@ module Etcd
 
   # command related error
   class KeyNotFound < Error; end
+
   class TestFailed < Error; end
+
   class NotFile < Error; end
+
   class NoMorePeer < Error; end
+
   class NotDir < Error; end
+
   class NodeExist < Error; end
+
   class KeyIsPreserved < Error; end
+
   class DirNotEmpty < Error; end
 
   # Post form related error
   class ValueRequired < Error; end
+
   class PrevValueRequired < Error; end
+
   class TTLNaN < Error; end
+
   class IndexNaN < Error; end
 
   # Raft related error
   class RaftInternal < Error; end
+
   class LeaderElect < Error; end
 
   # Etcd related error
   class WatcherCleared < Error; end
+
   class EventIndexCleared < Error; end
 
   ERROR_CODE_MAPPING = {

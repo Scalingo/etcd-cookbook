@@ -4,9 +4,9 @@
 #
 # Run 'chef exec bundle install' to install these dependencies
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'community_cookbook_releaser'
+gem "community_cookbook_releaser"
 
 group :test do
   gem "bundler", "~> 2.0"

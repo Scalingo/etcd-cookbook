@@ -12,7 +12,6 @@ describe Etcd::Stats do
   end
 
   describe 'of leader' do
-
     let(:stats) do
       client.stats(:leader)
     end

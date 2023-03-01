@@ -2,7 +2,7 @@ module EtcdCookbook
   module EtcdHelpers
     module Service
       def etcd_cmd
-        [new_resource.etcd_bin, etcd_daemon_opts].join(' ').strip
+        [new_resource.etcd_bin, etcd_daemon_opts].join(" ").strip
       end
 
       def etcd_daemon_opts
@@ -10,13 +10,13 @@ module EtcdCookbook
         opts << "-name=#{new_resource.node_name}" unless new_resource.node_name.nil?
         opts << "-advertise-client-urls=#{new_resource.advertise_client_urls}" unless new_resource.advertise_client_urls.nil?
         opts << "-cert-file=#{new_resource.cert_file}" unless new_resource.cert_file.nil?
-        opts << '-client-cert-auth=true' if new_resource.client_cert_auth == true
+        opts << "-client-cert-auth=true" if new_resource.client_cert_auth == true
         opts << "-cors=#{new_resource.cors}" unless new_resource.cors.nil?
         opts << "-data-dir=#{new_resource.data_dir}" unless new_resource.data_dir.nil?
         opts << "-log_package_levels=#{new_resource.log_package_levels}" unless new_resource.log_package_levels.nil?
         opts << "-discovery-fallback=#{new_resource.discovery_fallback}" unless new_resource.discovery_fallback.nil?
         opts << "-discovery-proxy=#{new_resource.discovery_proxy}" unless new_resource.discovery_proxy.nil?
-        opts << '-strict-reconfig-check=true' if new_resource.strict_reconfig_check == true
+        opts << "-strict-reconfig-check=true" if new_resource.strict_reconfig_check == true
         opts << "-auto-compaction-retention=#{new_resource.auto_compaction_retention}"
         opts << "-enable-v2=#{new_resource.enable_v2}"
         opts << "-discovery-srv=#{new_resource.discovery_srv}" unless new_resource.discovery_srv.nil?
@@ -36,7 +36,7 @@ module EtcdCookbook
         opts << "-max-wals=#{new_resource.max_wals}" unless new_resource.max_wals.nil?
         opts << "-peer-cert-allowed-cn=#{new_resource.peer_cert_allowed_cn}" unless new_resource.peer_cert_allowed_cn.nil?
         opts << "-peer-cert-file=#{new_resource.peer_cert_file}" unless new_resource.peer_cert_file.nil?
-        opts << '-peer-client-cert-auth=true' if new_resource.peer_client_cert_auth == true
+        opts << "-peer-client-cert-auth=true" if new_resource.peer_client_cert_auth == true
         opts << "-peer-key-file=#{new_resource.peer_key_file}" unless new_resource.peer_key_file.nil?
         opts << "-peer-trusted-ca-file=#{new_resource.peer_trusted_ca_file}" unless new_resource.peer_trusted_ca_file.nil?
         opts << "-auto-tls=#{new_resource.auto_tls}"
@@ -60,14 +60,14 @@ module EtcdCookbook
 
       def etcd_name
         if new_resource.default_service_name
-          'etcd'
+          "etcd"
         else
           "etcd-#{new_resource.node_name}"
         end
       end
 
       def etcdctl_cmd
-        [new_resource.etcdctl_bin, etcdctl_opts].join(' ').strip
+        [new_resource.etcdctl_bin, etcdctl_opts].join(" ").strip
       end
 
       def etcdctl_opts

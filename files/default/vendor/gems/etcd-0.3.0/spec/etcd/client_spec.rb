@@ -5,7 +5,7 @@ describe Etcd::Client do
     etcd_client
   end
 
-  it '#version' do #etcd 2.0.0-rc.1
+  it '#version' do # etcd 2.0.0-rc.1
     expect(client.version).to match(/^etcd v?\d+\.\d+\.\d+.*$/)
   end
 

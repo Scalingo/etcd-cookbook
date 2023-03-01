@@ -17,8 +17,8 @@
 # limitations under the License.
 #
 
-require 'tempfile'
-require 'stringio'
+require "tempfile"
+require "stringio"
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "spec_helper"))
 
 class LoggerLike
@@ -29,7 +29,7 @@ class LoggerLike
   end
 
   [:debug, :info, :warn, :error, :fatal].each do |method_name|
-    class_eval(<<-E)
+    class_eval(<<-E, __FILE__, __LINE__ + 1)
       def #{method_name}(message)
         @messages << message
       end
@@ -38,7 +38,6 @@ class LoggerLike
 end
 
 describe Mixlib::Log do
-
   # Since we are testing class behaviour for an instance variable
   # that gets set once, we need to reset it prior to each example [cb]
   before(:each) do
@@ -81,11 +80,11 @@ describe Mixlib::Log do
 
   it "should set the log level using the binding form,  with :debug, :info, :warn, :error, or :fatal" do
     levels = {
-      :debug => Logger::DEBUG,
-      :info  => Logger::INFO,
-      :warn  => Logger::WARN,
-      :error => Logger::ERROR,
-      :fatal => Logger::FATAL
+      debug: Logger::DEBUG,
+      info: Logger::INFO,
+      warn: Logger::WARN,
+      error: Logger::ERROR,
+      fatal: Logger::FATAL,
     }
     levels.each do |symbol, constant|
       Logit.level = symbol
@@ -101,14 +100,13 @@ describe Mixlib::Log do
     logdev.string.should match(/the_message/)
   end
 
-
   it "should set the log level using the method form, with :debug, :info, :warn, :error, or :fatal" do
     levels = {
-      :debug => Logger::DEBUG,
-      :info  => Logger::INFO,
-      :warn  => Logger::WARN,
-      :error => Logger::ERROR,
-      :fatal => Logger::FATAL
+      debug: Logger::DEBUG,
+      info: Logger::INFO,
+      warn: Logger::WARN,
+      error: Logger::ERROR,
+      fatal: Logger::FATAL,
     }
     levels.each do |symbol, constant|
       Logit.level(symbol)
@@ -143,5 +141,4 @@ describe Mixlib::Log do
     Logit.init
     Logit.level.should eql(:warn)
   end
-
 end
