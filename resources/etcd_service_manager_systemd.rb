@@ -40,7 +40,7 @@ action :start do
   systemd_contents = {
     Unit: {
       Description: 'Etcd Application Container Engine',
-      Documentation: 'https://coreos.com/etcd',
+      Documentation: 'https://etcd.io/docs/',
       After: 'network.target',
     },
     Service: {

@@ -30,16 +30,25 @@ action :create do
     action :create
   end
 
+  directory new_resource.etcd_bin_prefix do
+    action :create
+  end
+
+  file 'etcd_checksum' do
+    path "#{new_resource.etcd_bin_prefix}/.etcd_checksum"
+    content new_resource.checksum
+  end
+
   execute 'extract etcd' do
     command extract_etcd_cmd
     action :nothing
-    subscribes :run, 'remote_file[etcd tarball]'
+    subscribes :run, 'file[etcd_checksum]'
   end
 
   execute 'extract etcdctl' do
     command extract_etcdctl_cmd
     action :nothing
-    subscribes :run, 'remote_file[etcd tarball]'
+    subscribes :run, 'file[etcd_checksum]'
   end
 end
 
@@ -62,12 +71,13 @@ def file_cache_path
 end
 
 def default_source
-  "https://github.com/coreos/etcd/releases/download/v#{version}/etcd-v#{version}-linux-amd64.tar.gz"
+  "https://github.com/etcd-io/etcd/releases/download/v#{version}/etcd-v#{version}-linux-amd64.tar.gz"
 end
 
 def default_checksum
   case version
-  when '3.4.6' then 'a591b59639aed73061281d34720725ed47092705f68c7b11e0b6965044d4f7f6'
+  when '3.5.7' then 'a43119af79c592a874e8f59c4f23832297849d0c479338f9df36e196b86bc396'
+  when '3.4.24' then '8b2b35772704e67f956e6bac0fbb739d974155cd19602a00af9dc757a3a8f83d'
   when '3.3.19' then '9c9220002fb176f4d73492f78cab37c9bd8b5132b3ac6f14515629603518476d'
   when '3.2.17' then '0a75e794502e2e76417b19da2807a9915fa58dcbf0985e397741d570f4f305cd'
   when '3.2.15' then 'dff8ae43c49d8c21f9fc1fe5507cc2e86455994ac706b7d92684f389669462a9'
@@ -76,24 +86,8 @@ def default_checksum
   end
 end
 
-def etcd_bin
-  "#{etcd_bin_prefix}/etcd"
-end
-
-def etcd_bin_prefix
-  '/usr/bin'
-end
-
-def etcdctl_bin
-  "#{etcdctl_bin_prefix}/etcdctl"
-end
-
-def etcdctl_bin_prefix
-  etcd_bin_prefix
-end
-
 def extract_etcd_cmd
-  "tar xvf #{file_cache_path}/etcd-v#{version}-linux-amd64.tar.gz -C #{etcd_bin_prefix} etcd-v#{version}-linux-amd64/etcd --strip-components=1"
+  "tar xvf #{file_cache_path}/etcd-v#{version}-linux-amd64.tar.gz -C #{new_resource.etcd_bin_prefix} etcd-v#{version}-linux-amd64/etcd --strip-components=1"
 end
 
 def extract_etcdctl_cmd

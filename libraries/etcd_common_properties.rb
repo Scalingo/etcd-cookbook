@@ -16,8 +16,9 @@ module EtcdCookbook
         #####################
         # set default service name like etcd.service
         property :default_service_name, kind_of: [TrueClass, FalseClass], default: false
+        property :etcd_bin_prefix, String, default: '/usr/local/bin', desired_state: false
 
-        # https://coreos.com/etcd/docs/latest/configuration.html
+        # https://etcd.io/docs/v3.5/op-guide/configuration/
         # Member flags
         property :node_name, String, name_property: true, desired_state: false
         property :data_dir, String, default: lazy { "/#{node_name}.etcd" }, desired_state: false
