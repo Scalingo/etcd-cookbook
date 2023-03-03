@@ -45,7 +45,8 @@ module EtcdCookbook
         property :discovery_fallback, String, desired_state: false
         property :discovery_proxy, String, desired_state: false
         property :strict_reconfig_check, [true, false], default: false, desired_state: false
-        property :auto_compaction_retention, Integer, default: 0, desired_state: false
+        property :auto_compaction_retention, String, default: "0", desired_state: false
+        property :auto_compaction_mode, String, default: "revision", desired_state: false
         property :enable_v2, [true, false], default: true, desired_state: false
 
         # Proxy Flags
