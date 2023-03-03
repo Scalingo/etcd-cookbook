@@ -18,6 +18,7 @@ module EtcdCookbook
         opts << "--discovery-proxy=#{new_resource.discovery_proxy}" unless new_resource.discovery_proxy.nil?
         opts << '--strict-reconfig-check=true' if new_resource.strict_reconfig_check == true
         opts << "--auto-compaction-retention=#{new_resource.auto_compaction_retention}"
+        opts << "--auto-compaction-mode=#{new_resource.auto_compaction_mode}"
         opts << "--enable-v2=#{new_resource.enable_v2}"
         opts << "--discovery-srv=#{new_resource.discovery_srv}" unless new_resource.discovery_srv.nil?
         opts << "--discovery=#{new_resource.discovery}" unless new_resource.discovery.nil?
